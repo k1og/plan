@@ -1,0 +1,40 @@
+@model EventsCalendarViewModel
+
+@{
+    ViewData["Title"] = "Calendar";
+    ViewBag.TitleOfEvent = "Free";
+}
+
+<h1>@ViewData["Title"]</h1>
+<table border="1" width="100%" cellpadding="5">
+   <tr>
+    <th>Time</th>
+    <th>Su</th>
+    <th>Mo</th>
+    <th>Tu</th>
+    <th>We</th>
+    <th>Th</th>
+    <th>Fr</th>
+    <th>Sa</th>
+   </tr>
+    @for (int i = 0; i <= 23; i++)
+    {
+        <tr>
+            <td>@i:00</td>
+            @for (int y = 0; y < 7; y++)
+            {
+                foreach (var e in Model.WeekEvents)
+                {
+                    if ((int)e.StartDate.Value.DayOfWeek == y)
+                    {
+                        ViewBag.TitleOfEvent = e.Title;
+                    }
+                }
+                <td>@ViewBag.TitleOfEvent</td>
+                ViewBag.TitleOfEvent = "Free";
+
+            }
+            
+        </tr>
+    }
+ </table>
