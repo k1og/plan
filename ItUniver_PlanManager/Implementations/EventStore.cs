@@ -1,31 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
+using interfaces;
+using models;
 
-namespace models
+namespace implementations
 {
     /// <summary>
-    /// Хранилище событий FILE <see cref="Event"/>
+    /// Хранилище событий <see cref="Event"/>
     /// </summary>
-    public class EventFileStore : IStore<Event>
+    public class EventStore : IStore<Event>
     {
         /// <summary>
         /// ctor
         /// </summary>
-        public EventFileStore()
+        public EventStore()
         {
-            string json = File.ReadAllText(FilePath);
-            Events = JsonConvert.DeserializeObject<List<Event>>(json);
-            if (Events == null) 
-            {
-                Events = new List<Event>();
-            }
+            Events = new List<Event>();
         }
-
-        private string FilePath => @"events.json";
 
         /// <summary>
         /// Список событий
@@ -43,7 +35,6 @@ namespace models
             if (@event != null)
             {
                 Events.Add(@event);
-                File.WriteAllTextAsync(@"events.json", JsonConvert.SerializeObject(Events));
             }
         }
 

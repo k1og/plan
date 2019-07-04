@@ -2,6 +2,8 @@
 using models;
 using System.Linq;
 using System.Globalization;
+using interfaces;
+using implementations;
 
 namespace ItUniver_PlanManager
 {
@@ -49,6 +51,10 @@ namespace ItUniver_PlanManager
                                 {
                                     Console.WriteLine("Invalid date format");                                    
                                 }
+                            }
+                            else
+                            {
+                                invalidDate = false;                                
                             }
                             if (evt.StartDate != null)
                             {

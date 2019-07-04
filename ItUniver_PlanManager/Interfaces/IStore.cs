@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace models
+namespace interfaces
 {
-    public interface IEntity
-    {
-        Guid Uid { get; set; }
-    }
     public interface IStore<T> where T : class, IEntity
     {
         IEnumerable<T> Entities { get; }
