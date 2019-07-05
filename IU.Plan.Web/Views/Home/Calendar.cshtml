@@ -2,39 +2,58 @@
 
 @{
     ViewData["Title"] = "Calendar";
-    ViewBag.TitleOfEvent = "Free";
+    ViewBag.TitleOfEvent = "";
+    ViewBag.Color = "lightblue";
+    ViewBag.DayColor = "skyblue";
 }
 
 <h1>@ViewData["Title"]</h1>
 <table border="1" width="100%" cellpadding="5">
    <tr>
     <th>Time</th>
-    <th>Su</th>
-    <th>Mo</th>
-    <th>Tu</th>
-    <th>We</th>
-    <th>Th</th>
-    <th>Fr</th>
-    <th>Sa</th>
+    <th bgcolor="@(Model.DayOfWeek == DayOfWeek.Sunday ? ViewBag.DayColor : "")">Su</th>
+    <th bgcolor="@(Model.DayOfWeek == DayOfWeek.Monday ? ViewBag.DayColor : "")">Mo</th>
+    <th bgcolor="@(Model.DayOfWeek == DayOfWeek.Tuesday ? ViewBag.DayColor : "")">Tu</th>
+    <th bgcolor="@(Model.DayOfWeek == DayOfWeek.Wednesday ? ViewBag.DayColor : "")">We</th>
+    <th bgcolor="@(Model.DayOfWeek == DayOfWeek.Thursday ? ViewBag.DayColor : "")">Th</th>
+    <th bgcolor="@(Model.DayOfWeek == DayOfWeek.Friday ? ViewBag.DayColor : "")">Fr</th>
+    <th bgcolor="@(Model.DayOfWeek == DayOfWeek.Saturday ? ViewBag.DayColor : "")">Sa</th>
    </tr>
-    @for (int i = 0; i <= 23; i++)
+    @for (int h = 0; h <= 23; h++)
     {
         <tr>
-            <td>@i:00</td>
-            @for (int y = 0; y < 7; y++)
+            <td>@h:00</td>
+            @for (int d = 0; d < 7; d++)
             {
                 foreach (var e in Model.WeekEvents)
                 {
-                    if ((int)e.StartDate.Value.DayOfWeek == y)
+                    if ((int)e.StartDate.Value.DayOfWeek == d)
                     {
-                        ViewBag.TitleOfEvent = e.Title;
+                        if(e.EndDate.HasValue)
+                        {
+                            if(h >= e.StartDate.Value.Hour && h <= e.EndDate.Value.Hour)
+                            {
+                                ViewBag.TitleOfEvent = e.Title;
+                            }
+                        }
+                        else
+                        {
+                            if(e.StartDate.HasValue)
+                            {
+                                if(e.StartDate.Value.Hour == h)
+                                {
+                                    ViewBag.TitleOfEvent = e.Title;
+                                }
+                            }
+                        }
                     }
                 }
-                <td>@ViewBag.TitleOfEvent</td>
-                ViewBag.TitleOfEvent = "Free";
+                <td bgcolor="@(ViewBag.TitleOfEvent != "" ? ViewBag.Color : "")">
+                    @ViewBag.TitleOfEvent
+                </td>
+                ViewBag.TitleOfEvent = "";
 
             }
-            
         </tr>
     }
  </table>

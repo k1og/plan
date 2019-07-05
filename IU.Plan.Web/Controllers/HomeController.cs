@@ -30,7 +30,7 @@ namespace IU.Plan.Web.Controllers
         {
             var events = store.Entities;
             List<Event> thisWeekEvents = new List<Event>();
-            var thisDayOfWeek = DateTime.Now.DayOfYear % 7;
+            var thisDayOfWeek = DateTime.Now.DayOfWeek;
             //var thisDayOfYear = DateTime.Now.DayOfYear;
             //var plus = 7 - thisDayOfWeek;
             //var minus = -(thisDayOfWeek - 1);

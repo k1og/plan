@@ -11,6 +11,6 @@ namespace IU.Plan.Web.Models
     {
         public List<Event> WeekEvents { get; set; }
 
-        public int DayOfWeek {get; set;} //rewrite enum
+        public DayOfWeek DayOfWeek {get; set;} //rewrite enum
     }
 }
