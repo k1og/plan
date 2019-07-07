@@ -1,0 +1,71 @@
+@using Microsoft.AspNetCore.Html
+@model EventCalendarViewModel
+
+@{
+    ViewBag.Title = "Event Month";
+
+    var today = DateTime.Today;
+    var currentDay = today.Day - 1;
+    var dayIndex = 0;
+}
+
+@functions
+{
+
+    IHtmlContent PrintEvents(int dayNumber, DateTime today)
+    {
+        if (dayNumber >= Model.DaysInMonth) return null;
+        var day = new DateTime(today.Year, today.Month, dayNumber);
+
+        var dayEvent = Model.MonthEvents.FirstOrDefault(evt => evt.StartDate == day);
+        return dayEvent != null ? Html.Raw("<div class=\"event\">" + @dayEvent.Title + "</div>") : null;
+    }
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="calendar">
+
+    @Model.Date.ToString("dd/MM/yyyy")
+    <table border="1" width="100%" cellpadding="5">
+        <tr>
+            <th>понедельник</th>
+            <th>вторник</th>
+            <th>среда</th>
+            <th>четверг</th>
+            <th>пятница</th>
+            <th>суббота</th>
+            <th>воскресенье</th>
+        </tr>
+        @for (int i = 0; i < Model.RowCount; i++)
+        {
+            <tr>
+                @for (int j = 0; j < Model.ColumnCount; j++)
+                {
+                    if (j >= (int) Model.Date.DayOfWeek || i > 0)
+                    {
+                        var tdClass = dayIndex == currentDay && Model.Date.Year == today.Date.Year && Model.Date.Month  == today.Date.Month
+                            ? "highlight"
+                            : "";
+                        <td class="@(tdClass)">
+                            @(dayIndex++ < Model.DaysInMonth ? $"{dayIndex}." : "")
+                            @PrintEvents(dayIndex, Model.Date)
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+
+</div>
+
+
+<div>
+    <a asp-controller="PlanManager" asp-action="Index" asp-route-year="@Model.Date.AddMonths(-1).Year" asp-route-month="@Model.Date.AddMonths(-1).Month" >Previous Month</a>
+    <a asp-controller="PlanManager" asp-action="Index" asp-route-year="@Model.Date.AddMonths(1).Year" asp-route-month="@Model.Date.AddMonths(1).Month" >Next Month</a>
+</div>
