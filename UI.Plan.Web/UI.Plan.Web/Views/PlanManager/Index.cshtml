@@ -10,7 +10,7 @@
 }
 
 @functions
-{
+{    
 
     IHtmlContent PrintEvents(int dayNumber, DateTime today)
     {
@@ -18,7 +18,11 @@
         var day = new DateTime(today.Year, today.Month, dayNumber);
 
         var dayEvent = Model.MonthEvents.FirstOrDefault(evt => evt.StartDate == day);
-        return dayEvent != null ? Html.Raw("<div class=\"event\">" + @dayEvent.Title + "</div>") : null;
+        return dayEvent != null ? Html.Raw($"<div class=\"event\"> " +
+                                           $"<span>Title: {@dayEvent.Title}</span> " +
+                                           $"<span>Descr: {@dayEvent.Title}</span> " +
+                                           $"<span>StartDate: {@dayEvent.StartDate}</span> " +
+                                           $"</div>") : null;
     }
 
 }
@@ -26,7 +30,10 @@
 <h2>@ViewBag.Title</h2>
 
 <div class="calendar">
-
+<div>
+    <a asp-controller="PlanManager" asp-action="Index" asp-route-year="@Model.Date.AddMonths(-1).Year" asp-route-month="@Model.Date.AddMonths(-1).Month" >Previous Month</a>
+    <a asp-controller="PlanManager" asp-action="Index" asp-route-year="@Model.Date.AddMonths(1).Year" asp-route-month="@Model.Date.AddMonths(1).Month" >Next Month</a>
+</div>
     @Model.Date.ToString("dd/MM/yyyy")
     <table border="1" width="100%" cellpadding="5">
         <tr>
@@ -65,7 +72,3 @@
 </div>
 
 
-<div>
-    <a asp-controller="PlanManager" asp-action="Index" asp-route-year="@Model.Date.AddMonths(-1).Year" asp-route-month="@Model.Date.AddMonths(-1).Month" >Previous Month</a>
-    <a asp-controller="PlanManager" asp-action="Index" asp-route-year="@Model.Date.AddMonths(1).Year" asp-route-month="@Model.Date.AddMonths(1).Month" >Next Month</a>
-</div>
