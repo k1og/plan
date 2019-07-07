@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
-using interfaces;
+using PlanManagerLib.Interfaces;
 
-namespace implementations
+namespace PlanManagerLib.Implementations
 {
     /// <summary>
-    /// Хранилище сущностей FILE <see cref="entity"/>
+    /// Хранилище сущностей FILE <see cref="T"/>
     /// </summary>
     public class BaseFileStore<T> : IStore<T> where T : class, IEntity
     {
@@ -26,12 +26,10 @@ namespace implementations
         /// </summary>
         protected virtual void Init()
         {
-            if (File.Exists(FilePath))
-            {
-                var file = File.ReadAllText(FilePath);
-                var entities = JsonConvert.DeserializeObject<T[]>(file);
-                this.entities.AddRange(entities);
-            }
+            if (!File.Exists(FilePath)) return;
+            var file = File.ReadAllText(FilePath);
+            var entities = JsonConvert.DeserializeObject<T[]>(file) ?? throw new ArgumentNullException("JsonConvert.DeserializeObject<T[]>(file)");
+            this.entities.AddRange(entities);
         }
 
         /// <summary>
@@ -41,18 +39,14 @@ namespace implementations
         {
             File.WriteAllTextAsync(FilePath, JsonConvert.SerializeObject(entities));
         }
-        
-        private string fileName = "{0}.json";
+
+        private const string FileName = "{0}.json";
 
         protected virtual string FilePath { 
-            get 
-            { 
-                return string.Format(fileName, typeof(T).Name.ToLower());
-            }
-
-            set 
+            get => string.Format(FileName, typeof(T).Name.ToLower());
+            set
             {
-
+                
             }
         }
 
@@ -69,11 +63,9 @@ namespace implementations
         /// <param name="entity">Сущность</param>
         public virtual void Add (T entity) 
         {
-            if (entity != null)
-            {
-                entities.Add(entity);
-                Flush();
-            }
+            if (entity == null) return;
+            entities.Add(entity);
+            Flush();
         }
 
         /// <summary>
@@ -102,11 +94,9 @@ namespace implementations
         public virtual void Delete (Guid uid) 
         {
             var elem = Get(uid);
-            if (elem != null) 
-            {
-                entities.Remove(elem);
-                Flush();
-            }
+            if (elem == null) return;
+            entities.Remove(elem);
+            Flush();
         }
     }
 }

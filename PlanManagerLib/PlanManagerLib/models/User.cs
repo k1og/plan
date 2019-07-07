@@ -1,14 +1,11 @@
 using System;
-using interfaces;
+using PlanManagerLib.Interfaces;
 
-namespace models
+namespace PlanManagerLib.models
 {
     //add summary
     public class User : IEntity
     {
-        /// <inheritdoc/>
-        public Guid Uid { get; set; }
-
         public string Name { get; set; }
 
         public DateTime Birthday { get; set; }
@@ -18,13 +15,16 @@ namespace models
         public string Email { get; set; }
 
         /// <summary>
-        /// Принимать приглашения
+        ///     Принимать приглашения
         /// </summary>
         public bool AllowInvites { get; set; }
-        
+
         public Gender Gender { get; set; }
 
         public UserStatus Status { get; set; }
+
+        /// <inheritdoc />
+        public Guid Uid { get; set; }
     }
 
     public enum UserStatus

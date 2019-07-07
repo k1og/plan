@@ -13,7 +13,7 @@ namespace ItUniver_PlanManager
         {
             IStore<Event> store = new EventFileStore();
 
-            var dateformat = "dd/mm/yyyy hh:mm";
+            var dateformat = "dd/MM/yyyy HH:mm";
 
             while (true) 
             {
@@ -68,25 +68,27 @@ namespace ItUniver_PlanManager
                             Console.WriteLine("Enter the end date (dd/mm/yyyy hh:mm)");
                             Console.WriteLine("(To skip a date leave the input empty)");
                             var date = Console.ReadLine();
-                            DateTime EndDate;
                             if (date != "") 
                             {
-                                if (DateTime.TryParse(date, out EndDate))
+                                try 
                                 {
-                                    if (DateTime.Compare(evt.StartDate.Value, EndDate) > 0) 
+                                    evt.EndDate = DateTime.ParseExact(date, dateformat, CultureInfo.CreateSpecificCulture("en-US"));
+                                }
+                                catch (FormatException)
+                                {
+                                    Console.WriteLine("Invalid date format");                                    
+                                }
+
+                                if (evt.EndDate.Value != null) 
+                                {
+                                    if (DateTime.Compare(evt.StartDate.Value, evt.EndDate.Value) > 0) 
                                     {
                                         Console.WriteLine("Error! End time is earlier than start time");
                                     }
                                     else
                                     {
-                                        evt.EndDate = EndDate;
                                         invalidDate = false;
                                     }
-                                    
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Invalid date format");
                                 }
                             }
                             else
