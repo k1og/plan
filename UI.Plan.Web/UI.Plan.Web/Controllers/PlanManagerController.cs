@@ -16,6 +16,11 @@ namespace UI.Plan.Web.Controllers
 
         public IActionResult Index(int year, int month)
         {
+            if (year < 1 || month < 1 || month > 12)
+            {
+                year = DateTime.Today.Year;
+                month = DateTime.Today.Month;
+            }
             var date = new DateTime(year, month, DateTime.Today.Day, DateTime.Today.Hour, DateTime.Today.Minute, DateTime.Today.Second);
 
             var events = store.Entities;
