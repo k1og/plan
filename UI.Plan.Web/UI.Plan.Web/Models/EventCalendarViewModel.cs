@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using PlanManagerLib.models;
+using UI.Plan.Web.ClassExtensions;
 
 namespace UI.Plan.Web.Models
 {
@@ -40,7 +41,7 @@ namespace UI.Plan.Web.Models
         /// <summary>
         /// Количество строк
         /// </summary>
-        public int RowCount => (int)Math.Ceiling((DaysInMonth * 1d + (double)Date.DayOfWeek) / ColumnCount);
+        public int RowCount => (int)Math.Ceiling((DaysInMonth * 1d + Date.DayOfWeek.ToRusInt()) / ColumnCount);
         
     }
 }

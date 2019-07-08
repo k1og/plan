@@ -1,6 +1,5 @@
-@using System.Collections
 @using Microsoft.AspNetCore.Html
-@using PlanManagerLib.models
+@using UI.Plan.Web.ClassExtensions
 @model EventCalendarViewModel
 
 @{
@@ -22,19 +21,18 @@
         var day = new DateTime(today.Year, today.Month, dayNumber);
 
         var dayEvent = Model.MonthEvents.FirstOrDefault(evt => evt.StartDate?.Year == day.Year && evt.StartDate?.Month == day.Month && evt.StartDate?.Day == day.Day);
-        if (@dayEvent?.StartDate != null)
-            return Html.Raw($"<div class=\"event\"> " +
+        if (@dayEvent?.StartDate == null) return null;
+        return Html.Raw($"<div class=\"event\"> " +
                             $"<span>Title: {@dayEvent.Title}</span> " +
                             $"<span>StartDate: {@dayEvent.StartDate?.ToString("HH:mm")}</span> " +
                             $"</div>");
-        return null;
     }
     
     IEnumerable<Event> DayEvents (int dayNumber, DateTime today)
     {
         if (dayNumber >= Model.DaysInMonth) return null;
         var day = new DateTime(today.Year, today.Month, dayNumber);
-        
+        // rewrite to ul li
         return Model.MonthEvents.Where(evt => evt.StartDate?.Year == day.Year && evt.StartDate?.Month == day.Month && evt.StartDate?.Day == day.Day);
 
     }
@@ -48,7 +46,7 @@
     <a asp-controller="PlanManager" asp-action="Index" asp-route-year="@Model.Date.AddMonths(-1).Year" asp-route-month="@Model.Date.AddMonths(-1).Month" >Previous Month</a>
     <a asp-controller="PlanManager" asp-action="Index" asp-route-year="@Model.Date.AddMonths(1).Year" asp-route-month="@Model.Date.AddMonths(1).Month" >Next Month</a>
 </div>
-    @Model.Date.ToString("MM/yyyy")
+    @Model.Date.ToString("MMMM yyyy")
     <table border="1" width="100%" cellpadding="5">
         <tr>
             <th>понедельник</th>
@@ -64,7 +62,7 @@
             <tr>
                 @for (var j = 0; j < Model.ColumnCount; j++)
                 {
-                    if (j >= (int) Model.Date.DayOfWeek || i > 0)
+                    if (j >= Model.Date.DayOfWeek.ToRusInt() - 1 || i > 0)
                     {
                         var tdClass = dayIndex == currentDay && Model.Date.Year == today.Date.Year && Model.Date.Month  == today.Date.Month
                             ? "highlight"
@@ -76,7 +74,7 @@
                             {
                                 @foreach (var dayEvent in dayEvents)
                                  {
-                                     <div class="event">
+                                     <div class="event"> 
                                          <span>Title: @dayEvent.Title</span>
                                          <span>StartDate: @dayEvent.StartDate?.ToString("HH:mm")</span>
                                      </div>

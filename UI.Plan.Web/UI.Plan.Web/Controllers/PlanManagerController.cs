@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using PlanManagerLib.Implementations;
@@ -14,7 +12,7 @@ namespace UI.Plan.Web.Controllers
     {
         IStore<Event> store = new EventFileStore();
 
-        public IActionResult Index(int year, int month)
+        public IActionResult Index(int year, int month) //add ?
         {
             if (year < 1 || month < 1 || month > 12)
             {
