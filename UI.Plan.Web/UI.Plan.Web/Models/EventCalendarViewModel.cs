@@ -40,7 +40,7 @@ namespace UI.Plan.Web.Models
         /// <summary>
         /// Количество строк
         /// </summary>
-        public int RowCount => (int)Math.Ceiling(DaysInMonth * 1d / ColumnCount);
+        public int RowCount => (int)Math.Ceiling((DaysInMonth * 1d + (double)Date.DayOfWeek) / ColumnCount);
         
     }
 }

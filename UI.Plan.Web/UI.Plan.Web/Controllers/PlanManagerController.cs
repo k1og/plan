@@ -18,11 +18,9 @@ namespace UI.Plan.Web.Controllers
         {
             var date = new DateTime(year, month, DateTime.Today.Day, DateTime.Today.Hour, DateTime.Today.Minute, DateTime.Today.Second);
 
-            var startMonth = new DateTime(date.Year, date.Month, 1);
-            var endMonth = startMonth.AddMonths(1);
             var events = store.Entities;
-            var monthEvents = events.Where(e => e.StartDate.HasValue).Where(e => e.StartDate.Value.Month == date.Month && e.StartDate.Value.Year == date.Year).ToList();
-            var model = new EventCalendarViewModel
+            var monthEvents = events.Where(e => e.StartDate?.Month == date.Month && e.StartDate?.Year == date.Year).ToList();
+            var model = new EventCalendarViewModel    
             {
                 MonthEvents = monthEvents,
                 Date = date,
