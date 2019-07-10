@@ -12,7 +12,7 @@ namespace UI.Plan.Web.Controllers
     {
         IStore<Event> store = new EventFileStore();
 
-        public IActionResult Index(int year, int month) //add ?
+        public IActionResult Index(int year, int month) //add Поставщики значений
         {
             if (year < 1 || month < 1 || month > 12)
             {

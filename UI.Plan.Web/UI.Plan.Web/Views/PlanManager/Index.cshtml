@@ -23,9 +23,9 @@
         var dayEvent = Model.MonthEvents.FirstOrDefault(evt => evt.StartDate?.Year == day.Year && evt.StartDate?.Month == day.Month && evt.StartDate?.Day == day.Day);
         if (@dayEvent?.StartDate == null) return null;
         return Html.Raw($"<div class=\"event\"> " +
-                            $"<span>Title: {@dayEvent.Title}</span> " +
-                            $"<span>StartDate: {@dayEvent.StartDate?.ToString("HH:mm")}</span> " +
-                            $"</div>");
+                        $"<span>Title: {@dayEvent.Title}</span> " +
+                        $"<span>StartDate: {@dayEvent.StartDate?.ToString("HH:mm")}</span> " +
+                        $"</div>");
     }
     
     IEnumerable<Event> DayEvents (int dayNumber, DateTime today)
@@ -38,8 +38,92 @@
     }
 
 }
+<script>
+    function getDetails(uid) {
+        $.ajax({
+            url: '/Event/Details?uid=' + uid,
+            success: function (data) {
+                $('#DetailsResult').html(data);
+                $("#DetailsResult").dialog({
+                    modal: true,
+                    width: 'auto',
+                    buttons: {
+                        "Редактировать": function () {
+                            openEditPopup(uid);
+                        },
+                        "Delete": function () {
+                            deleteEvent(uid);
+                            $(this).dialog("close");
+                        },
+                        Ok: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function saveEvent() {
+        $.ajax({
+            url: '/Event/Save',
+            type: 'post',
+            data: $('form#eventSaveForm').serialize(),
+            success: function (data) {
+                $('#EditPopup').html(data);
+            }
+        });
+    }
+    
+    function deleteEvent(uid) {
+            $.ajax({
+                url: '/Event/Delete',
+                type: 'post',
+                data: {uid : uid},
+                success: function (data) {
+                    location.reload();
+                }
+            });
+    }
+    
+    function addPopup() {
+            $.ajax({
+                url: '/Event/Add',
+                success: function (data) {
+                    openEditPopup(data.uid)
+                }
+            });
+        }
+
+    function openEditPopup(uid) {
+        $.ajax({
+            url: '/Event/Edit?uid=' + uid,
+            success: function (data) {
+                $('#EditPopup').html(data);
+                $("#EditPopup").dialog({
+                    modal: true,
+                    width: 'auto',
+                    buttons: {
+                        "Сохранить": function () {
+                            saveEvent();
+                            $(this).dialog("close");
+                        },
+                        Cancel: function () {
+                            $(this).dialog("close");
+                        }
+                    },
+                    close: function () {
+                        //form[0].reset();
+                    }
+                });
+            }
+        });
+    }
+    
+</script>
 
 <h2>@ViewBag.Title</h2>
+
 
 <div class="calendar">
 <div>
@@ -74,9 +158,11 @@
                             {
                                 @foreach (var dayEvent in dayEvents)
                                  {
-                                     <div class="event"> 
-                                         <span>Title: @dayEvent.Title</span>
-                                         <span>StartDate: @dayEvent.StartDate?.ToString("HH:mm")</span>
+                                     <div class="event">
+                                        <a href="#" title="@dayEvent.Title" onclick="getDetails('@dayEvent.Uid')">
+                                            @dayEvent.Title
+                                        </a>
+                                        <span>StartDate: @dayEvent.StartDate?.ToString("HH:mm")</span>
                                      </div>
                                  }
                             }
@@ -91,6 +177,15 @@
         }
     </table>
 
+    <div id="DetailsResult">
+    
+    </div>
+    <div id="EditPopup">
+    
+    </div>
+    
+    
+    <button style="margin-top: 10px" onclick="addPopup()">Add</button>
 </div>
 
 
