@@ -4,12 +4,13 @@ using PlanManagerLib.Implementations;
 using PlanManagerLib.Interfaces;
 using PlanManagerLib.models;
 using UI.Plan.Web.Models;
+using UI.Plan.Web.NH;
 
 namespace UI.Plan.Web.Controllers
 {
     public class EventController : Controller
     {
-        private IStore<Event> store = new EventFileStore();
+        private IStore<Event> store = new EventDBStore<Event>();//new EventFileStore();
         
         public PartialViewResult Details(Guid uid)
         {

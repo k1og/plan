@@ -5,12 +5,13 @@ using PlanManagerLib.Implementations;
 using PlanManagerLib.Interfaces;
 using PlanManagerLib.models;
 using UI.Plan.Web.Models;
+using UI.Plan.Web.NH;
 
 namespace UI.Plan.Web.Controllers
 {
     public class PlanManagerController : Controller
     {
-        IStore<Event> store = new EventFileStore();
+        IStore<Event> store = new EventDBStore<Event>();//new EventFileStore();
 
         public IActionResult Index(int year, int month) //add Поставщики значений
         {

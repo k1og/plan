@@ -7,18 +7,24 @@
 
 
     <ItemGroup>
+        <PackageReference Include="FluentNHibernate" Version="2.1.2" />
         <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.HttpsPolicy" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+        <PackageReference Include="MySql.Data" Version="8.0.16" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+        <PackageReference Include="NHibernate" Version="5.2.5" />
     </ItemGroup>
 
 
     <ItemGroup>
       <Reference Include="PlanManagerLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\..\PlanManagerLib\PlanManagerLib\bin\Debug\netcoreapp2.2\PlanManagerLib.dll</HintPath>
+      </Reference>
+      <Reference Include="Ui.PlanManager.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\Ui.PlanManager.Extensions\Ui.PlanManager.Extensions\bin\Debug\netcoreapp2.2\Ui.PlanManager.Extensions.dll</HintPath>
       </Reference>
     </ItemGroup>
 
